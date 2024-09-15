@@ -8,11 +8,8 @@ import (
 
 var ErrInvalidString = errors.New("invalid string")
 
-// Проверить, что в строке нет повторяющихся цифр, цифра не первая и строка не пустая.
+// Проверить, что в строке нет повторяющихся цифр и цифра не первая
 func isValid(runeStr []rune) bool {
-	if len(runeStr) == 0 {
-		return false
-	}
 	if unicode.IsDigit(runeStr[0]) {
 		return false
 	}
@@ -34,11 +31,12 @@ func Unpack(inStr string) (string, error) {
 	}
 	var sb strings.Builder
 	for i := 0; i < len(runeStr); i++ {
+		// Не выйти за границу массива в следующем шаге.
 		if i == (len(runeStr) - 1) {
 			sb.WriteRune(runeStr[i])
 			break
 		}
-		// Если след. цифра, то добавить повторяющуюся строку и пропустить эту цифру в цикле.
+		// Если след. цифра, то добавить повторяющуюся строку и пропустить эту цифру как символ.
 		if unicode.IsDigit(runeStr[i+1]) {
 			sb.WriteString(strings.Repeat(string(runeStr[i]), int(runeStr[i+1])-'0'))
 			i++
