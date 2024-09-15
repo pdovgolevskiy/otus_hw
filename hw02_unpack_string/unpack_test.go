@@ -4,6 +4,7 @@ import (
 	"errors"
 	"testing"
 
+	//nolint:depguard
 	"github.com/stretchr/testify/require"
 )
 
@@ -22,7 +23,7 @@ func TestUnpack(t *testing.T) {
 		{input: "@4", expected: "@@@@"},
 		{input: "!@#$%^&*/", expected: "!@#$%^&*/"},
 		{input: "a\t5e", expected: "a\t\t\t\t\te"},
-		// uncomment if task with asterisk completed
+		// uncomment if task with asterisk completed.
 		// {input: `qwe\4\5`, expected: `qwe45`},
 		// {input: `qwe\45`, expected: `qwe44444`},
 		// {input: `qwe\\5`, expected: `qwe\\\\\`},
