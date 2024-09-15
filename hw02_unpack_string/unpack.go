@@ -8,7 +8,7 @@ import (
 
 var ErrInvalidString = errors.New("invalid string")
 
-// Проверить, что в строке нет повторяющихся цифр и цифра не первая
+// Проверить, что в строке нет повторяющихся цифр и цифра не первая.
 func isValid(runeStr []rune) bool {
 	if unicode.IsDigit(runeStr[0]) {
 		return false
