@@ -10,10 +10,11 @@ type wordToCount struct {
 	count int
 }
 
+var r = regexp.MustCompile(`[^\s]+`)
+
 func Top10(str string) []string {
 	//allWords := strings.Split(str, " ")
 
-	r := regexp.MustCompile(`[^\s]+`)
 	allWords := r.FindAllString(str, -1)
 	wordCountMap := make(map[string]int)
 	for _, word := range allWords {
