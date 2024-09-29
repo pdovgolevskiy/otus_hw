@@ -13,19 +13,12 @@ type wordToCount struct {
 var r = regexp.MustCompile(`[^\s]+`)
 
 func Top10(str string) []string {
-	//allWords := strings.Split(str, " ")
-
 	allWords := r.FindAllString(str, -1)
 	wordCountMap := make(map[string]int)
 	for _, word := range allWords {
-		if _, ok := wordCountMap[word]; ok {
-			wordCountMap[word]++
-			//do something here
-		} else {
-			wordCountMap[word] = 1
-		}
+		wordCountMap[word]++
 	}
-	var wordsCount []wordToCount
+	wordsCount := make([]wordToCount, 0, len(wordCountMap))
 	for key, value := range wordCountMap {
 		wordsCount = append(wordsCount, wordToCount{key, value})
 	}
@@ -43,7 +36,6 @@ func Top10(str string) []string {
 			})
 			if index < 10 {
 				strSlice = append(strSlice, wordsCount[index].word)
-
 				prevCount = elem.count
 				prevWordIndex = index
 				continue
