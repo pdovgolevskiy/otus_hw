@@ -12,7 +12,7 @@ type wordToCount struct {
 
 var r = regexp.MustCompile(`[^\s]+`)
 
-// Отсортировать слайс строк между элементами startIndex endIndex
+// Отсортировать слайс строк между элементами startIndex endIndex.
 func sortSubSlice(inSlc []string, startIndex int, endIndex int) {
 	tempSlice := inSlc[startIndex:endIndex]
 	sort.Slice(tempSlice, func(i, j int) bool {
