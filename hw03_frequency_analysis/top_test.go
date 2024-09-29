@@ -89,15 +89,11 @@ func TestTop10(t *testing.T) {
 	})
 
 	t.Run("Меньше 10-и слов без сортировки", func(t *testing.T) {
-		if taskWithAsteriskIsCompleted {
-			// TODO
-		} else {
-			expected := []string{
-				"Два",   // 8
-				"слова", // 6
-			}
-			require.Equal(t, expected, Top10(smallText))
+		expected := []string{
+			"Два",   // 8
+			"слова", // 6
 		}
+		require.Equal(t, expected, Top10(smallText))
 	})
 
 	t.Run("Меньше 10-и слов с сортировкой", func(t *testing.T) {
