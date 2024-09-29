@@ -12,7 +12,16 @@ type wordToCount struct {
 
 var r = regexp.MustCompile(`[^\s]+`)
 
+// Отсортировать слайс строк между элементами startIndex endIndex
+func sortSubSlice(inSlc []string, startIndex int, endIndex int) {
+	tempSlice := inSlc[startIndex:endIndex]
+	sort.Slice(tempSlice, func(i, j int) bool {
+		return tempSlice[i] < tempSlice[j]
+	})
+}
+
 func Top10(str string) []string {
+	const returnSliceLen = 10
 	allWords := r.FindAllString(str, -1)
 	wordCountMap := make(map[string]int)
 	for _, word := range allWords {
@@ -29,31 +38,22 @@ func Top10(str string) []string {
 	prevCount := 0
 	prevWordIndex := 0
 	for index, elem := range wordsCount {
+		// Лексикографисечки отсортировать слова с одинаковочй частотой.
 		if elem.count != prevCount {
-			tempSlice := strSlice[prevWordIndex:index]
-			sort.Slice(tempSlice, func(i, j int) bool {
-				return tempSlice[i] < tempSlice[j]
-			})
-			if index < 10 {
-				strSlice = append(strSlice, wordsCount[index].word)
-				prevCount = elem.count
-				prevWordIndex = index
-				continue
+			sortSubSlice(strSlice, prevWordIndex, index)
+			if index >= returnSliceLen {
+				break
 			}
-			break
+			strSlice = append(strSlice, wordsCount[index].word)
+			prevCount = elem.count
+			prevWordIndex = index
 		} else {
-			if index < 10 {
-				strSlice = append(strSlice, wordsCount[index].word)
-				if index == len(wordsCount)-1 || index == 9 {
-					tempSlice := strSlice[prevWordIndex:index]
-					sort.Slice(tempSlice, func(i, j int) bool {
-						return tempSlice[i] < tempSlice[j]
-					})
-				}
-				continue
-			}
-			break
+			strSlice = append(strSlice, wordsCount[index].word)
 		}
+		sortSubSlice(strSlice, prevWordIndex, len(strSlice))
+	}
+	if len(strSlice) > returnSliceLen {
+		return append([]string(nil), strSlice[:returnSliceLen]...)
 	}
 	return strSlice
 }
