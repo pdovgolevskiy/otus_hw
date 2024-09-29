@@ -10,7 +10,10 @@ import (
 // Change to true if needed.
 var taskWithAsteriskIsCompleted = false
 
-var text = `я я я я Как видите, он  спускается  по  лестнице  вслед  за  своим
+var smallText = "Два слова"                    // Текст, в котором меньше десяти слов.
+var smallText2 = "слова два"                   // Текст, и их надо сортнуть.
+var wordOutOfBound = "я ю а б в г д ж з и й к" // Текст для теста, что происходит корректная сортировка если слово с одинаковой частотой выпадает за границу 10. (я и ю должны выпасть).
+var text = `Как видите, он  спускается  по  лестнице  вслед  за  своим
 	другом   Кристофером   Робином,   головой   вниз,  пересчитывая
 	ступеньки собственным затылком:  бум-бум-бум.  Другого  способа
 	сходить  с  лестницы  он  пока  не  знает.  Иногда ему, правда,
@@ -80,4 +83,46 @@ func TestTop10(t *testing.T) {
 			require.Equal(t, expected, Top10(text))
 		}
 	})
+
+	t.Run("Меньше 10-и слов без сортировки", func(t *testing.T) {
+		if taskWithAsteriskIsCompleted {
+			// TODO
+			expected := []string{
+				"Два",   // 1
+				"слова", // 1
+			}
+			require.Equal(t, expected, Top10(smallText))
+		} else {
+			expected := []string{
+				"Два",   // 8
+				"слова", // 6
+			}
+			require.Equal(t, expected, Top10(smallText))
+		}
+	})
+
+	t.Run("Меньше 10-и слов с сортировкой", func(t *testing.T) {
+		expected := []string{
+			"два",   // 1
+			"слова", // 1
+		}
+		require.Equal(t, expected, Top10(smallText2))
+	})
+
+	t.Run("Слово должно выпало после лексикографического сорта", func(t *testing.T) {
+		expected := []string{
+			"а", // 1
+			"б", // 1
+			"в", // 1
+			"г", // 1
+			"д", // 1
+			"ж", // 1
+			"з", // 1
+			"и", // 1
+			"й", // 1
+			"к", // 1
+		}
+		require.Equal(t, expected, Top10(wordOutOfBound))
+	})
+
 }
