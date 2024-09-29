@@ -12,7 +12,7 @@ type wordToCount struct {
 
 var r = regexp.MustCompile(`[^\s]+`)
 
-// Отсортировать слайс строк между элементами startIndex endIndex.
+// sortSubSlice сортирует слайс строк между элементами startIndex endIndex.
 func sortSubSlice(inSlc []string, startIndex int, endIndex int) {
 	tempSlice := inSlc[startIndex:endIndex]
 	sort.Slice(tempSlice, func(i, j int) bool {
@@ -20,8 +20,8 @@ func sortSubSlice(inSlc []string, startIndex int, endIndex int) {
 	})
 }
 
-func Top10(str string) []string {
-	const returnSliceLen = 10
+// countWordFreq возвращает все встреченные слова и их частоту для строки str.
+func countWordFreq(str string) []wordToCount {
 	allWords := r.FindAllString(str, -1)
 	wordCountMap := make(map[string]int)
 	for _, word := range allWords {
@@ -34,9 +34,15 @@ func Top10(str string) []string {
 	sort.Slice(wordsCount, func(i, j int) bool {
 		return wordsCount[i].count > wordsCount[j].count
 	})
+	return wordsCount
+}
+
+func Top10(str string) []string {
+	const returnSliceLen = 10
 	strSlice := []string{}
 	prevCount := 0
 	prevWordIndex := 0
+	wordsCount := countWordFreq(str)
 	for index, elem := range wordsCount {
 		// Лексикографисечки отсортировать слова с одинаковочй частотой.
 		if elem.count != prevCount {
