@@ -11,8 +11,10 @@ import (
 var taskWithAsteriskIsCompleted = true
 
 var (
-	smallText  = `Два слова Два слова` // Текст, в котором меньше десяти слов.
-	smallText2 = "слова два"           // Текст, и их надо сортнуть.
+	exampleText1 = `Нога нога нога! нога нога, `
+	exampleText2 = "какой-то какойто dog,cat dog...cat dogcat"
+	smallText    = `Два слова Два слова` // Текст, в котором меньше десяти слов.
+	smallText2   = "слова два"           // Текст, и их надо сортнуть.
 	// Текст для теста, что происходит корректная сортировка
 	// если слово с одинаковой частотой выпадает за границу 10. (я и ю должны выпасть).
 	wordOutOfBound = "я ю а б в г д ж з и й к"
@@ -128,4 +130,27 @@ func TestTop10(t *testing.T) {
 		}
 		require.Equal(t, expected, Top10(asteriskWord))
 	})
+
+	t.Run("Проверка, что нога одинаковая", func(t *testing.T) {
+		expected := []string{
+			"нога",
+		}
+		require.Equal(t, expected, Top10(exampleText1))
+	})
+
+	t.Run("Проверка, что слова с знаками внутри разные", func(t *testing.T) {
+		expected := []string{
+			"dog,cat",
+			"dog...cat",
+			"dogcat",
+			"какой-то",
+			"какойто",
+		}
+		require.Equal(t, expected, Top10(exampleText2))
+	})
+
+	t.Run("Проверка тире - не слово", func(t *testing.T) {
+		require.Len(t, Top10("-"), 0)
+	})
+
 }
