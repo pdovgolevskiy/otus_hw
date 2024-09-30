@@ -8,14 +8,15 @@ import (
 )
 
 // Change to true if needed.
-var taskWithAsteriskIsCompleted = false
+var taskWithAsteriskIsCompleted = true
 
 var (
-	smallText  = "Два слова" // Текст, в котором меньше десяти слов.
-	smallText2 = "слова два" // Текст, и их надо сортнуть.
+	smallText  = `Два слова Два слова` // Текст, в котором меньше десяти слов.
+	smallText2 = "слова два"           // Текст, и их надо сортнуть.
 	// Текст для теста, что происходит корректная сортировка
 	// если слово с одинаковой частотой выпадает за границу 10. (я и ю должны выпасть).
 	wordOutOfBound = "я ю а б в г д ж з и й к"
+	asteriskWord   = `abc cde "abc cde"`
 	text           = `Как видите, он  спускается  по  лестнице  вслед  за  своим
 	другом   Кристофером   Робином,   головой   вниз,  пересчитывая
 	ступеньки собственным затылком:  бум-бум-бум.  Другого  способа
@@ -90,7 +91,7 @@ func TestTop10(t *testing.T) {
 
 	t.Run("Меньше 10-и слов без сортировки", func(t *testing.T) {
 		expected := []string{
-			"Два",   // 8
+			"два",   // 8
 			"слова", // 6
 		}
 		require.Equal(t, expected, Top10(smallText))
@@ -104,7 +105,7 @@ func TestTop10(t *testing.T) {
 		require.Equal(t, expected, Top10(smallText2))
 	})
 
-	t.Run("Слово должно выпало после лексикографического сорта", func(t *testing.T) {
+	t.Run("Слово выпало после лексикографического сорта", func(t *testing.T) {
 		expected := []string{
 			"а", // 1
 			"б", // 1
@@ -118,5 +119,13 @@ func TestTop10(t *testing.T) {
 			"к", // 1
 		}
 		require.Equal(t, expected, Top10(wordOutOfBound))
+	})
+
+	t.Run("Проверка, что кавычки отбрасываются", func(t *testing.T) {
+		expected := []string{
+			"abc", // 2
+			"cde", // 2
+		}
+		require.Equal(t, expected, Top10(asteriskWord))
 	})
 }

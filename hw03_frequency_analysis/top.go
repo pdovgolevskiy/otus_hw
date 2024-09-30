@@ -3,6 +3,8 @@ package hw03frequencyanalysis
 import (
 	"regexp"
 	"sort"
+	"strings"
+	"unicode"
 )
 
 type wordToCount struct {
@@ -25,7 +27,19 @@ func countWordFreq(str string) []wordToCount {
 	allWords := r.FindAllString(str, -1)
 	wordCountMap := make(map[string]int)
 	for _, word := range allWords {
-		wordCountMap[word]++
+		word = strings.ToLower(word)
+		runeWord := []rune(word)
+		wordLen := len(runeWord)
+		if !unicode.IsDigit(runeWord[wordLen-1]) && !unicode.IsLetter(runeWord[wordLen-1]) {
+			runeWord = runeWord[:wordLen-1]
+		}
+		if len(runeWord) > 0 && (!unicode.IsDigit(runeWord[0]) && !unicode.IsLetter(runeWord[0])) {
+			runeWord = runeWord[1:]
+		}
+		word = string(runeWord)
+		if word != "" {
+			wordCountMap[word]++
+		}
 	}
 	wordsCount := make([]wordToCount, 0, len(wordCountMap))
 	for key, value := range wordCountMap {
