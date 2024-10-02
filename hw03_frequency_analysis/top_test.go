@@ -152,5 +152,4 @@ func TestTop10(t *testing.T) {
 	t.Run("Проверка тире - не слово", func(t *testing.T) {
 		require.Len(t, Top10("-"), 0)
 	})
-
 }
