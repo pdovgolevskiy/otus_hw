@@ -41,7 +41,6 @@ func (l *list) MoveToFront(i *ListItem) {
 	i.Next = l.head
 	l.head.Prev = i
 	l.head = i
-	//TODO
 }
 
 func (l *list) Remove(i *ListItem) {
@@ -55,7 +54,7 @@ func (l *list) PushFront(v interface{}) *ListItem {
 		initList(l, v)
 		return l.head
 	}
-	var lItem = ListItem{Value: v, Prev: nil, Next: l.head}
+	lItem := ListItem{Value: v, Prev: nil, Next: l.head}
 	l.head.Prev = &lItem
 	l.head = &lItem
 	l.elem_count++
@@ -67,7 +66,7 @@ func (l *list) PushBack(v interface{}) *ListItem {
 		initList(l, v)
 		return l.tail
 	}
-	var lItem = ListItem{Value: v, Prev: l.tail, Next: nil}
+	lItem := ListItem{Value: v, Prev: l.tail, Next: nil}
 	l.tail.Next = &lItem
 	l.tail = &lItem
 	l.elem_count++
@@ -93,28 +92,15 @@ func (l *list) Len() int {
 }
 
 type list struct {
-	//List       // Remove me after realization.
 	elem_count int
 	head       *ListItem
 	tail       *ListItem
-	// Place your code here.
 }
 
 func (l *list) printList() {
 	currentElem := l.head
 	for currentElem != nil {
 		fmt.Println(currentElem.Value)
-		currentElem = currentElem.Next
-	}
-}
-
-// removeByIndex удаляет элемент по индексу
-func removeByIndex(l *list, index int) {
-	currentElem := l.head
-	for i := 0; currentElem != nil; i++ {
-		if i == index {
-			l.MoveToFront(currentElem)
-		}
 		currentElem = currentElem.Next
 	}
 }
