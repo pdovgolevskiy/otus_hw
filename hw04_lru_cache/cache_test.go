@@ -65,9 +65,6 @@ func TestCache(t *testing.T) {
 		c.Set("5", 101)
 		_, wasInCache2 := c.Get("2")
 		require.False(t, wasInCache2)
-
-		//t.Skip()
-		// Write me
 	})
 }
 
