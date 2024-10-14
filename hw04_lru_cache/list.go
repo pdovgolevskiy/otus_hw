@@ -28,9 +28,12 @@ func initList(l *list, value interface{}) {
 }
 
 func (l *list) MoveToFront(i *ListItem) {
-	i.Prev.Next = i.Next
-	i.Next.Prev = i.Prev
-
+	if i.Prev != nil {
+		i.Prev.Next = i.Next
+	}
+	if i.Next != nil {
+		i.Next.Prev = i.Prev
+	}
 	i.Prev = nil
 	i.Next = l.head
 	l.head.Prev = i
