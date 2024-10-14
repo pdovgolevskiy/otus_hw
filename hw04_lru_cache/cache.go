@@ -34,7 +34,7 @@ func (lruC *lruCache) Get(key Key) (interface{}, bool) {
 	if value, ok := lruC.items[key]; ok {
 		return value.Value, ok
 	}
-	return 0, false
+	return nil, false
 }
 
 func (lruC *lruCache) Clear() {
