@@ -36,6 +36,8 @@ func (l *list) MoveToFront(i *ListItem) {
 	}
 	if i.Next != nil {
 		i.Next.Prev = i.Prev
+	} else {
+		l.tail = i.Prev
 	}
 	i.Prev = nil
 	i.Next = l.head
@@ -44,17 +46,20 @@ func (l *list) MoveToFront(i *ListItem) {
 }
 
 func (l *list) Remove(i *ListItem) {
+	if l.head == nil {
+		return
+	}
 	if i.Prev != nil {
 		i.Prev.Next = i.Next
 	} else {
-		l.tail = i.Next
-		l.tail.Prev = nil
+		l.head = i.Next
+		l.head.Prev = nil
 	}
 	if i.Next != nil {
 		i.Next.Prev = i.Prev
 	} else {
-		l.head = i.Prev
-		//l.head.Next = nil
+		l.tail = i.Prev
+		l.tail.Next = nil
 	}
 	l.elemCount--
 }
