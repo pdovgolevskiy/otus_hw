@@ -24,7 +24,7 @@ type ListItem struct {
 func initList(l *list, value interface{}) {
 	item := ListItem{Next: nil, Prev: nil, Value: value}
 	l.head, l.tail = &item, &item
-	l.elem_count++
+	l.elemCount++
 }
 
 func (l *list) MoveToFront(i *ListItem) {
@@ -46,7 +46,7 @@ func (l *list) MoveToFront(i *ListItem) {
 func (l *list) Remove(i *ListItem) {
 	i.Prev.Next = i.Next
 	i.Next.Prev = i.Prev
-	l.elem_count--
+	l.elemCount--
 }
 
 func (l *list) PushFront(v interface{}) *ListItem {
@@ -57,7 +57,7 @@ func (l *list) PushFront(v interface{}) *ListItem {
 	lItem := ListItem{Value: v, Prev: nil, Next: l.head}
 	l.head.Prev = &lItem
 	l.head = &lItem
-	l.elem_count++
+	l.elemCount++
 	return &lItem
 }
 
@@ -69,7 +69,7 @@ func (l *list) PushBack(v interface{}) *ListItem {
 	lItem := ListItem{Value: v, Prev: l.tail, Next: nil}
 	l.tail.Next = &lItem
 	l.tail = &lItem
-	l.elem_count++
+	l.elemCount++
 	return &lItem
 }
 
@@ -88,13 +88,13 @@ func (l *list) Back() *ListItem {
 }
 
 func (l *list) Len() int {
-	return l.elem_count
+	return l.elemCount
 }
 
 type list struct {
-	elem_count int
-	head       *ListItem
-	tail       *ListItem
+	elemCount int
+	head      *ListItem
+	tail      *ListItem
 }
 
 func (l *list) printList() {
