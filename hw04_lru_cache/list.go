@@ -31,9 +31,7 @@ func (l *list) MoveToFront(i *ListItem) {
 	if i == l.head {
 		return
 	}
-	if i.Prev != nil {
-		i.Prev.Next = i.Next
-	}
+	i.Prev.Next = i.Next
 	if i.Next != nil {
 		i.Next.Prev = i.Prev
 	} else {
@@ -46,21 +44,37 @@ func (l *list) MoveToFront(i *ListItem) {
 }
 
 func (l *list) Remove(i *ListItem) {
-	if l.head == nil {
+	switch {
+	case l.head == nil: //удаление из пустого списка
 		return
-	}
-	if i.Prev != nil {
-		i.Prev.Next = i.Next
-	} else {
+	case l.elemCount == 1: //Удалить единственный элемент
+		l.head = nil
+		l.tail = nil
+	case i.Prev == nil:
 		l.head = i.Next
 		l.head.Prev = nil
-	}
-	if i.Next != nil {
-		i.Next.Prev = i.Prev
-	} else {
+	case i.Next == nil:
 		l.tail = i.Prev
 		l.tail.Next = nil
+	default:
+		i.Next.Prev = i.Prev
+		i.Prev.Next = i.Next
 	}
+	// if l.head == nil {
+	// 	return
+	// }
+	// if i.Prev != nil {
+	// 	i.Prev.Next = i.Next
+	// } else {
+	// 	l.head = i.Next
+	// 	l.head.Prev = nil
+	// }
+	// if i.Next != nil {
+	// 	i.Next.Prev = i.Prev
+	// } else {
+	// 	l.tail = i.Prev
+	// 	l.tail.Next = nil
+	// }
 	l.elemCount--
 }
 
