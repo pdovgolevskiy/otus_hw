@@ -6,6 +6,7 @@ import (
 	"sync"
 	"testing"
 
+	//nolint:depguard
 	"github.com/stretchr/testify/require"
 )
 
@@ -50,7 +51,20 @@ func TestCache(t *testing.T) {
 	})
 
 	t.Run("purge logic", func(t *testing.T) {
-		// Write me
+		// Тест на логику выталкивания элементов из-за размера очереди.
+		c := NewCache(3)
+		c.Set("1", 100)
+		c.Set("2", 101)
+		c.Set("3", 101)
+		c.Set("4", 101)
+		_, wasInCache := c.Get("1")
+		require.False(t, wasInCache)
+		// Тест на логику выталкивания давно используемых элементов.
+		c.Get("4")
+		c.Get("3")
+		c.Set("5", 101)
+		_, wasInCache2 := c.Get("2")
+		require.False(t, wasInCache2)
 	})
 }
 
