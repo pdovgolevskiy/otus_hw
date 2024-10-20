@@ -25,16 +25,17 @@ func (lruC *lruCache) Set(key Key, value interface{}) bool {
 		lruC.queue.MoveToFront(lruC.items[key])
 		return true
 	}
-	lruC.items[key] = lruC.queue.PushFront(cacheItem{key, value})
-	if lruC.queue.Len() > lruC.capacity {
+	if lruC.queue.Len() == lruC.capacity {
 		delete(lruC.items, lruC.queue.Back().Value.(cacheItem).key)
 		lruC.queue.Remove(lruC.queue.Back())
 	}
+	lruC.items[key] = lruC.queue.PushFront(cacheItem{key, value})
 	return false
 }
 
 func (lruC *lruCache) Get(key Key) (interface{}, bool) {
 	if value, ok := lruC.items[key]; ok {
+		lruC.queue.MoveToFront(lruC.items[key])
 		return value.Value.(cacheItem).value, ok
 	}
 	return nil, false

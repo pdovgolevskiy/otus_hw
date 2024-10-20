@@ -12,7 +12,6 @@ type List interface {
 	PushBack(v interface{}) *ListItem
 	Remove(i *ListItem)
 	MoveToFront(i *ListItem)
-	printList()
 }
 
 type ListItem struct {
