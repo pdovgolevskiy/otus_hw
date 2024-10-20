@@ -1,9 +1,5 @@
 package hw04lrucache
 
-import (
-	"fmt"
-)
-
 type List interface {
 	Len() int
 	Front() *ListItem
@@ -108,14 +104,6 @@ type list struct {
 	elemCount int
 	head      *ListItem
 	tail      *ListItem
-}
-
-func (l *list) printList() {
-	currentElem := l.head
-	for currentElem != nil {
-		fmt.Println(currentElem.Value)
-		currentElem = currentElem.Next
-	}
 }
 
 func NewList() List {
