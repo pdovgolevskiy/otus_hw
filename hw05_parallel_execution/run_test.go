@@ -8,6 +8,7 @@ import (
 	"testing"
 	"time"
 
+	//nolint:depguard
 	"github.com/stretchr/testify/require"
 	"go.uber.org/goleak"
 )
@@ -87,6 +88,6 @@ func TestRun(t *testing.T) {
 		err := Run(tasks, workersCount, maxErrorsCount)
 
 		require.Truef(t, errors.Is(err, ErrErrorsLimitExceeded), "actual err - %v", err)
-		require.LessOrEqual(t, runTasksCount, int32(workersCount), "extra tasks were started")
+		require.LessOrEqual(t, runTasksCount, int32(0), "extra tasks were started")
 	})
 }
