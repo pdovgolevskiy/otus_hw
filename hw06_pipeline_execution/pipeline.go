@@ -8,11 +8,17 @@ type (
 
 type Stage func(in In) (out Out)
 
+func cleanChannel(out Out) {
+	for range out {
+	}
+}
+
 func ExecutePipeline(in In, done In, stages ...Stage) Out {
 	for _, stage := range stages {
 		newInChann := make(Bi)
 		out := stage(in)
 		go func() {
+			defer cleanChannel(out)
 			defer close(newInChann)
 			for {
 				select {
