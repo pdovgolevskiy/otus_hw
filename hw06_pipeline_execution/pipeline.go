@@ -8,7 +8,31 @@ type (
 
 type Stage func(in In) (out Out)
 
+func cleanChannel(out Out) {
+	for range out {
+	} //revive:disable-line:empty-block
+}
+
 func ExecutePipeline(in In, done In, stages ...Stage) Out {
-	// Place your code here.
-	return nil
+	for _, stage := range stages {
+		newInChann := make(Bi)
+		out := stage(in)
+		go func() {
+			defer cleanChannel(out)
+			defer close(newInChann)
+			for {
+				select {
+				case <-done:
+					return
+				case val, ok := <-out:
+					if !ok {
+						return
+					}
+					newInChann <- val
+				}
+			}
+		}()
+		in = newInChann
+	}
+	return in
 }
