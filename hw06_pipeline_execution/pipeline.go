@@ -10,7 +10,8 @@ type Stage func(in In) (out Out)
 
 func cleanChannel(out Out) {
 	for range out {
-	}
+	} //nolint
+
 }
 
 func ExecutePipeline(in In, done In, stages ...Stage) Out {
