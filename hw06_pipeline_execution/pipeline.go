@@ -33,7 +33,6 @@ func ExecutePipeline(in In, done In, stages ...Stage) Out {
 			}
 		}()
 		in = newInChann
-
 	}
 	return in
 }
