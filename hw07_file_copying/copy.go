@@ -15,7 +15,6 @@ var (
 )
 
 func Copy(fromPath, toPath string, offset, limit int64) error {
-	const bufSize int = 1024
 	file, err := os.Open(fromPath)
 	if err != nil {
 		log.Fatal(err)
@@ -43,7 +42,7 @@ func Copy(fromPath, toPath string, offset, limit int64) error {
 	//readByteLen := int(sz - offset)
 	bar := pb.New(int(limit)).SetUnits(pb.U_BYTES)
 	bar.Start()
-	newFile.Seek(offset, 0)
+	file.Seek(offset, 0)
 	writer := io.MultiWriter(newFile, bar)
 	io.CopyN(writer, file, int64(limit))
 	bar.Finish()
