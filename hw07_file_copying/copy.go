@@ -5,6 +5,8 @@ import (
 	"io"
 	"log"
 	"os"
+
+	"github.com/cheggaaa/pb"
 )
 
 var (
@@ -15,10 +17,10 @@ var (
 func Copy(fromPath, toPath string, offset, limit int64) error {
 	const bufSize int = 1024
 	file, err := os.Open(fromPath)
-	defer file.Close()
 	if err != nil {
 		log.Fatal(err)
 	}
+	defer file.Close()
 	fi, err := file.Stat()
 	if err != nil {
 		log.Fatal(err)
@@ -34,24 +36,15 @@ func Copy(fromPath, toPath string, offset, limit int64) error {
 		log.Fatal(err)
 	}
 	os.Chmod(toPath, mode)
-	//
 	//TMP
 	if limit == 0 || limit > sz {
 		limit = sz
 	}
-
-	for offset < sz {
-		io.CopyN(newFile, file, int64(bufSize))
-		// read, err := file.Read(buf[offset:])
-		// offset += int64(read)
-		// if err == io.EOF {
-		// // что если не дочитали ?
-		// break
-		// }
-		// if err != nil {
-		// log.Panicf("failed to read: %v", err)
-		// }
-	}
-	// Place your code here.
+	readByteLen := int(sz - offset)
+	bar := pb.New(readByteLen).SetUnits(pb.U_BYTES)
+	bar.Start()
+	writer := io.MultiWriter(newFile, bar)
+	io.CopyN(writer, file, int64(readByteLen))
+	bar.Finish()
 	return nil
 }
