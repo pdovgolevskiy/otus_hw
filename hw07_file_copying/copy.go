@@ -3,9 +3,9 @@ package main
 import (
 	"errors"
 	"io"
-	"log"
 	"os"
 
+	//nolint:depguard
 	"github.com/cheggaaa/pb"
 )
 
@@ -17,34 +17,32 @@ var (
 func Copy(fromPath, toPath string, offset, limit int64) error {
 	file, err := os.Open(fromPath)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 	defer file.Close()
 	fi, err := file.Stat()
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 	sz := fi.Size()
 	if offset > sz {
-		log.Fatal(ErrUnsupportedFile)
+		return ErrUnsupportedFile
 	}
-	//
 	mode := fi.Mode()
 	newFile, err := os.Create(toPath)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
+	defer newFile.Close()
 	os.Chmod(toPath, mode)
-	//TMP
 	if limit == 0 || limit > sz {
 		limit = sz
 	}
-	//readByteLen := int(sz - offset)
 	bar := pb.New(int(limit)).SetUnits(pb.U_BYTES)
 	bar.Start()
 	file.Seek(offset, 0)
 	writer := io.MultiWriter(newFile, bar)
-	io.CopyN(writer, file, int64(limit))
+	io.CopyN(writer, file, limit)
 	bar.Finish()
 	return nil
 }
