@@ -26,7 +26,7 @@ func Copy(fromPath, toPath string, offset, limit int64) error {
 	}
 	sz := fi.Size()
 	if offset > sz {
-		return ErrUnsupportedFile
+		return ErrOffsetExceedsFileSize
 	}
 	mode := fi.Mode()
 	newFile, err := os.Create(toPath)
