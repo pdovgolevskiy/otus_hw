@@ -24,8 +24,9 @@ func equal(file1 string, file2 string) bool {
 	}
 	return bytes.Equal(f1, f2)
 }
+
 func TestCopy(t *testing.T) {
-	//перевод тестов из sh
+	// перевод тестов из sh.
 	const outputFilePath = "out.txt"
 	defer os.Remove(outputFilePath)
 	Copy("testdata/input.txt", outputFilePath, 0, 0)
@@ -36,7 +37,7 @@ func TestCopy(t *testing.T) {
 
 	Copy("testdata/input.txt", outputFilePath, 0, 1000)
 	require.True(t, equal(outputFilePath, "testdata/out_offset0_limit1000.txt"))
-	// Тесты на ошибки
+	// Тесты на ошибки.
 	err := Copy("file_not_exists.txt", outputFilePath, 0, 0)
 	require.True(t, errors.Is(err, os.ErrNotExist))
 
