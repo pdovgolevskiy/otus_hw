@@ -42,7 +42,7 @@ func Copy(fromPath, toPath string, offset, limit int64) error {
 	}
 	defer newFile.Close()
 	os.Chmod(toPath, mode)
-	if limit == 0 || limit > sz {
+	if limit == 0 || limit+offset > sz {
 		limit = sz - offset
 	}
 	bar := pb.New(int(limit)).SetUnits(pb.U_BYTES)
