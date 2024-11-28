@@ -12,13 +12,9 @@ import (
 var (
 	ErrUnsupportedFile       = errors.New("unsupported file")
 	ErrOffsetExceedsFileSize = errors.New("offset exceeds file size")
-	ErrSrcEqDst              = errors.New("source file equals dest file")
 )
 
 func Copy(fromPath, toPath string, offset, limit int64) error {
-	if fromPath == toPath {
-		return ErrSrcEqDst
-	}
 	file, err := os.Open(fromPath)
 	if err != nil {
 		return err
@@ -36,6 +32,9 @@ func Copy(fromPath, toPath string, offset, limit int64) error {
 		return ErrOffsetExceedsFileSize
 	}
 	mode := fi.Mode()
+	if _, err := os.Stat(toPath); os.IsExist(err) {
+		return err
+	}
 	newFile, err := os.Create(toPath)
 	if err != nil {
 		return err
