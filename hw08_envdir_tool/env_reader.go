@@ -2,9 +2,10 @@ package main
 
 import (
 	"bufio"
-	"fmt"
-	"log"
+	"errors"
 	"os"
+	"path/filepath"
+	"strings"
 )
 
 type Environment map[string]EnvValue
@@ -13,24 +14,6 @@ type Environment map[string]EnvValue
 type EnvValue struct {
 	Value      string
 	NeedRemove bool
-}
-
-func readLine(dir string) {
-	file, err := os.Open(dir)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer file.Close()
-
-	scanner := bufio.NewScanner(file)
-	// optionally, resize scanner's capacity for lines over 64K, see next example
-	for scanner.Scan() {
-		fmt.Println(scanner.Text())
-	}
-
-	if err := scanner.Err(); err != nil {
-		log.Fatal(err)
-	}
 }
 
 // ReadDir reads a specified directory and returns map of env variables.
@@ -42,16 +25,28 @@ func ReadDir(dir string) (Environment, error) {
 	}
 	env := Environment{}
 	for _, e := range entries {
-		file, err := os.Open(e.Name())
+		fi, _ := e.Info()
+		if fi.Size() == 0 {
+			env[e.Name()] = EnvValue{"", true}
+			continue
+		}
+		fp := filepath.Join(dir, e.Name())
+		file, err := os.Open(fp)
 		if err != nil {
-			log.Fatal(err)
+			return nil, err
 		}
 		scanner := bufio.NewScanner(file)
-		scanner.Scan()
+		for scanner.Scan() {
+			envVal := scanner.Text()
+			if strings.Contains(envVal, "=") {
+				return nil, errors.New("unsupported file: env contains =")
+			}
+			envVal = strings.Split(envVal, string('\000'))[0] // Обрезать строку после терминального нуля (если он есть).
+			envVal = strings.Trim(envVal, " 	")
+			env[e.Name()] = EnvValue{envVal, false}
+			break // Прочитать только первую строку.
+		}
 		file.Close()
-		env[e.Name()] = EnvValue{scanner.Text(), false}
-		//os.Setenv(e.Name(), strings.TrimRight(scanner.Text(), " 	"))
-		// env.key = e.Name() env.val = scanner.Text()
 	}
-	return nil, nil
+	return env, nil
 }
