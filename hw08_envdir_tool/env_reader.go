@@ -41,8 +41,9 @@ func ReadDir(dir string) (Environment, error) {
 			if strings.Contains(envVal, "=") {
 				return nil, errors.New("unsupported file: env contains =")
 			}
-			envVal = strings.Split(envVal, string('\000'))[0] // Обрезать строку после терминального нуля (если он есть).
-			envVal = strings.Trim(envVal, " 	")
+			envVal = strings.Replace(envVal, "\000", "\n", -1)
+			//envVal = strings.Split(envVal, string('\000'))[0] // Обрезать строку после терминального нуля (если он есть).
+			envVal = strings.TrimRight(envVal, " 	")
 			env[e.Name()] = EnvValue{envVal, false}
 			break // Прочитать только первую строку.
 		}

@@ -6,11 +6,11 @@ import (
 )
 
 func main() {
-	const dirStr = "./testdata/env"
-	env, err := ReadDir(dirStr)
+	env, err := ReadDir(os.Args[1])
 	if err != nil {
 		log.Fatal(err.Error())
 	}
-	rc := RunCmd(os.Args, env)
+	cmdArgs := os.Args[2:]
+	rc := RunCmd(cmdArgs, env)
 	os.Exit(rc)
 }
