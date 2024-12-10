@@ -26,5 +26,5 @@ func RunCmd(cmd []string, env Environment) (returnCode int) {
 		exitCode := exitErr.ExitCode()
 		return exitCode
 	}
-	return -1
+	return cmdC.ProcessState.ExitCode()
 }
