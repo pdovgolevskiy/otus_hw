@@ -11,7 +11,7 @@ func TestRunCmd(t *testing.T) {
 	const envDir = "./testdata/env"
 	env, err := ReadDir(envDir)
 	require.Nil(t, err)
-	testCmds := []string{"/bin/bash", "./testdata/echo.sh", "arg1=1", "arg2=2"} //"$(pwd)/testdata/env"
+	testCmds := []string{"/bin/bash", "./testdata/echo.sh", "arg1=1", "arg2=2"}
 	rc := RunCmd(testCmds, env)
 	require.Equal(t, 0, rc)
 }

@@ -17,10 +17,6 @@ func RunCmd(cmd []string, env Environment) (returnCode int) {
 	cmdC := exec.Command(cmd[0], cmd[1:]...)
 	cmdC.Stdout = os.Stdout
 	cmdC.Stderr = os.Stderr
-	err := cmdC.Run()
-	if exitErr, ok := err.(*exec.ExitError); ok {
-		exitCode := exitErr.ExitCode()
-		return exitCode
-	}
+	cmdC.Run()
 	return cmdC.ProcessState.ExitCode()
 }
