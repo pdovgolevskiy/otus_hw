@@ -16,7 +16,7 @@ type EnvValue struct {
 	NeedRemove bool
 }
 
-var ErrUnsupported error = errors.New("unsupported file: env contains =")
+var ErrUnsupported = errors.New("unsupported file: env contains =")
 
 // ReadDir reads a specified directory and returns map of env variables.
 // Variables represented as files where filename is name of variable, file first line is a value.
