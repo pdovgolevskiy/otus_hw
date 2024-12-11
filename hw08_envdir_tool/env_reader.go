@@ -16,6 +16,8 @@ type EnvValue struct {
 	NeedRemove bool
 }
 
+var ErrUnsupported error = errors.New("unsupported file: env contains =")
+
 // ReadDir reads a specified directory and returns map of env variables.
 // Variables represented as files where filename is name of variable, file first line is a value.
 func ReadDir(dir string) (Environment, error) {
@@ -30,6 +32,9 @@ func ReadDir(dir string) (Environment, error) {
 			env[e.Name()] = EnvValue{"", true}
 			continue
 		}
+		if strings.Contains(e.Name(), "=") {
+			return nil, ErrUnsupported
+		}
 		fp := filepath.Join(dir, e.Name())
 		file, err := os.Open(fp)
 		if err != nil {
@@ -38,11 +43,8 @@ func ReadDir(dir string) (Environment, error) {
 		scanner := bufio.NewScanner(file)
 		for scanner.Scan() {
 			envVal := scanner.Text()
-			if strings.Contains(envVal, "=") {
-				return nil, errors.New("unsupported file: env contains =")
-			}
 			envVal = strings.ReplaceAll(envVal, "\000", "\n")
-			envVal = strings.TrimRight(envVal, " 	")
+			envVal = strings.TrimRight(envVal, " \t")
 			env[e.Name()] = EnvValue{envVal, false}
 			break // Прочитать только первую строку.
 		}

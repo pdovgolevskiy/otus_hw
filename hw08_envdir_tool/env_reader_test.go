@@ -18,5 +18,7 @@ with new line`)
 	require.Equal(t, env["EMPTY"].Value, "")
 	require.True(t, env["UNSET"].NeedRemove)
 
-	// количествоо параме
+	const unsupportedEnvDir = "./testdata/unsupportedEnv"
+	_, err2 := ReadDir(unsupportedEnvDir)
+	require.Equal(t, err2, ErrUnsupported)
 }
