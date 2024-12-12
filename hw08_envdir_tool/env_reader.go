@@ -28,12 +28,12 @@ func ReadDir(dir string) (Environment, error) {
 	env := Environment{}
 	for _, e := range entries {
 		fi, _ := e.Info()
+		if strings.Contains(e.Name(), "=") {
+			return nil, ErrUnsupported
+		}
 		if fi.Size() == 0 {
 			env[e.Name()] = EnvValue{"", true}
 			continue
-		}
-		if strings.Contains(e.Name(), "=") {
-			return nil, ErrUnsupported
 		}
 		fp := filepath.Join(dir, e.Name())
 		file, err := os.Open(fp)
